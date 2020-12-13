@@ -27,28 +27,22 @@
 
 #define PRINT_FUNC(fmt, type) type:print_##fmt
 
-#if 0
-#define PRINT_TEMPLATE(fmt, type)                   \
-    static inline void print_##fmt(type value)             \
-    {                                               \
-        printf("%s: %" #fmt "\n", __func__, value); \
-    }
-#else
-#define PRINT_TEMPLATE(fmt, type)       \
+#define PRINT_TEMPLATE(fmt, type)              \
     static inline void print_##fmt(type value) \
-    {                                   \
-        printf("%" #fmt, value);        \
+    {                                          \
+        printf("%" #fmt, value);               \
     }
-#endif
+#define PRINT_TEMPLATE2(fmt, type) \
+    static inline void print_##fmt(type value)
 
-#define PRINT_0(x) _Generic(          \
-    (x),                              \
+#define PRINT_0(value) _Generic(      \
+    (value),                          \
     PRINT_FUNC(s, char *),            \
     PRINT_FUNC(d, int),               \
     PRINT_FUNC(u, unsigned int),      \
     PRINT_FUNC(p, long int),          \
-    PRINT_FUNC(p, unsigned long int), \
-    PRINT_FUNC(p, default))(x);
+    PRINT_FUNC(x, unsigned long int), \
+    PRINT_FUNC(p, default))(value);
 
 // #define PRINT_0(x)  x;
 #define PRINT_1(x)
@@ -62,7 +56,11 @@
 #define printv(...) _PRINTV(__VA_ARGS__)
 #define $(x) , x,
 
-PRINT_TEMPLATE(p, void *);
-PRINT_TEMPLATE(s, char *);
-PRINT_TEMPLATE(d, int);
-PRINT_TEMPLATE(u, unsigned int);
+PRINT_TEMPLATE(p, const void *);
+PRINT_TEMPLATE(s, const char *);
+PRINT_TEMPLATE(d, const int);
+PRINT_TEMPLATE(u, const unsigned int);
+PRINT_TEMPLATE2(x, const unsigned long int)
+{
+    printf("%p", (const void *)value);
+}

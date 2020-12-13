@@ -29,21 +29,21 @@
 
 #if 0
 #define PRINT_TEMPLATE(fmt, type)                   \
-    void print_##fmt(type value)                    \
+    static inline void print_##fmt(type value)             \
     {                                               \
         printf("%s: %" #fmt "\n", __func__, value); \
     }
-static void print_p(void *i)
+static inline void print_p(void *i)
 {
     printf("%s: %p", __func__, (void *)i);
 }
 #else
-#define PRINT_TEMPLATE(fmt, type) \
-    void print_##fmt(type value)  \
-    {                             \
-        printf("%" #fmt, value);  \
+#define PRINT_TEMPLATE(fmt, type)       \
+    static inline void print_##fmt(type value) \
+    {                                   \
+        printf("%" #fmt, value);        \
     }
-static void print_p(void *i)
+static inline void print_p(void *i)
 {
     printf("%p", (void *)i);
 }

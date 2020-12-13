@@ -33,20 +33,12 @@
     {                                               \
         printf("%s: %" #fmt "\n", __func__, value); \
     }
-static inline void print_p(void *i)
-{
-    printf("%s: %p", __func__, (void *)i);
-}
 #else
 #define PRINT_TEMPLATE(fmt, type)       \
     static inline void print_##fmt(type value) \
     {                                   \
         printf("%" #fmt, value);        \
     }
-static inline void print_p(void *i)
-{
-    printf("%p", (void *)i);
-}
 #endif
 
 #define PRINT_0(x) _Generic(          \
@@ -70,6 +62,7 @@ static inline void print_p(void *i)
 #define printv(...) _PRINTV(__VA_ARGS__)
 #define $(x) , x,
 
+PRINT_TEMPLATE(p, void *);
 PRINT_TEMPLATE(s, char *);
 PRINT_TEMPLATE(d, int);
 PRINT_TEMPLATE(u, unsigned int);
